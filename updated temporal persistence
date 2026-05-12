@@ -1,0 +1,224 @@
+
+@prefix : <http://example.org/contract-lifecycle#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:ContractLifecycleOntology rdf:type owl:Ontology ;
+    rdfs:label "Defense Contract Lifecycle Ontology v2" .
+
+#################################################################
+# Core Classes
+#################################################################
+
+:Contract rdf:type owl:Class .
+:ContractModification rdf:type owl:Class .
+:Organization rdf:type owl:Class .
+:ContractorOrganization rdf:type owl:Class ;
+    rdfs:subClassOf :Organization .
+
+:GovernmentOrganization rdf:type owl:Class ;
+    rdfs:subClassOf :Organization .
+
+:Person rdf:type owl:Class .
+:Role rdf:type owl:Class .
+:LegalContractorRole rdf:type owl:Class ;
+    rdfs:subClassOf :Role .
+
+:ContractingOfficerRepresentativeRole rdf:type owl:Class ;
+    rdfs:subClassOf :Role .
+
+:TemporalInterval rdf:type owl:Class .
+:RoleAssignment rdf:type owl:Class .
+:ContractEvent rdf:type owl:Class .
+:InstitutionalAct rdf:type owl:Class .
+:ModificationIssuanceEvent rdf:type owl:Class ;
+    rdfs:subClassOf :InstitutionalAct .
+
+:InformationArtifact rdf:type owl:Class .
+:ModificationDocument rdf:type owl:Class ;
+    rdfs:subClassOf :InformationArtifact .
+
+:ContractStateTransition rdf:type owl:Class .
+
+#################################################################
+# Properties
+#################################################################
+
+:hasContractNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Contract ;
+    rdfs:range xsd:string .
+
+:hasStartDate rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:date .
+
+:hasEndDate rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:date .
+
+:hasIssueDate rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:date .
+
+:hasLegalContractor rdf:type owl:ObjectProperty ;
+    rdfs:domain :Contract ;
+    rdfs:range :ContractorOrganization .
+
+:hasCOR rdf:type owl:ObjectProperty ;
+    rdfs:domain :Contract ;
+    rdfs:range :Person .
+
+:hasModification rdf:type owl:ObjectProperty ;
+    rdfs:domain :Contract ;
+    rdfs:range :ContractModification .
+
+:replacesLegalContractor rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractModification ;
+    rdfs:range :ContractorOrganization .
+
+:substitutesLegalContractor rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractModification ;
+    rdfs:range :ContractorOrganization .
+
+:replacesCOR rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractModification ;
+    rdfs:range :Person .
+
+:substitutesCOR rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractModification ;
+    rdfs:range :Person .
+
+:assignedRole rdf:type owl:ObjectProperty ;
+    rdfs:domain :RoleAssignment ;
+    rdfs:range :Role .
+
+:assignedTo rdf:type owl:ObjectProperty ;
+    rdfs:domain :RoleAssignment ;
+    rdfs:range owl:Thing .
+
+:validDuring rdf:type owl:ObjectProperty ;
+    rdfs:domain :RoleAssignment ;
+    rdfs:range :TemporalInterval .
+
+:appliesToContract rdf:type owl:ObjectProperty ;
+    rdfs:domain :RoleAssignment ;
+    rdfs:range :Contract .
+
+:documents rdf:type owl:ObjectProperty ;
+    rdfs:domain :ModificationDocument ;
+    rdfs:range :InstitutionalAct .
+
+:producesStateTransition rdf:type owl:ObjectProperty ;
+    rdfs:domain :InstitutionalAct ;
+    rdfs:range :ContractStateTransition .
+
+:changesContractState rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractStateTransition ;
+    rdfs:range :Contract .
+
+:resultsInContractorSubstitution rdf:type owl:ObjectProperty ;
+    rdfs:domain :ContractStateTransition ;
+    rdfs:range :ContractorOrganization .
+
+#################################################################
+# Core Individuals
+#################################################################
+
+:Contract_W912DY_23_C_0047 rdf:type :Contract ;
+    :hasContractNumber "W912DY-23-C-0047" .
+
+:TalismanLogisticsSolutions rdf:type :ContractorOrganization ;
+    rdfs:label "Talisman Logistics Solutions" .
+
+:BeaconDefenseIndustries rdf:type :ContractorOrganization ;
+    rdfs:label "Beacon Defense Industries" .
+
+:JamesLiu rdf:type :Person ;
+    rdfs:label "Capt. James Liu" .
+
+:SarahChen rdf:type :Person ;
+    rdfs:label "Maj. Sarah Chen" .
+
+:TalismanLegalContractorRoleInstance rdf:type :LegalContractorRole .
+:BeaconLegalContractorRoleInstance rdf:type :LegalContractorRole .
+
+:InitialCORRoleInstance rdf:type :ContractingOfficerRepresentativeRole .
+:ReplacementCORRoleInstance rdf:type :ContractingOfficerRepresentativeRole .
+
+#################################################################
+# Temporal Intervals
+#################################################################
+
+:Interval_TalismanContractorPeriod rdf:type :TemporalInterval ;
+    :hasStartDate "2023-03-01"^^xsd:date ;
+    :hasEndDate "2024-10-01"^^xsd:date .
+
+:Interval_BeaconContractorPeriod rdf:type :TemporalInterval ;
+    :hasStartDate "2024-10-01"^^xsd:date ;
+    :hasEndDate "2026-05-01"^^xsd:date .
+
+:Interval_LiuCORPeriod rdf:type :TemporalInterval ;
+    :hasStartDate "2023-03-01"^^xsd:date ;
+    :hasEndDate "2025-10-01"^^xsd:date .
+
+:Interval_ChenCORPeriod rdf:type :TemporalInterval ;
+    :hasStartDate "2025-10-01"^^xsd:date ;
+    :hasEndDate "2026-05-01"^^xsd:date .
+
+#################################################################
+# Role Assignments
+#################################################################
+
+:TalismanContractorAssignment rdf:type :RoleAssignment ;
+    :assignedRole :TalismanLegalContractorRoleInstance ;
+    :assignedTo :TalismanLogisticsSolutions ;
+    :validDuring :Interval_TalismanContractorPeriod ;
+    :appliesToContract :Contract_W912DY_23_C_0047 .
+
+:BeaconContractorAssignment rdf:type :RoleAssignment ;
+    :assignedRole :BeaconLegalContractorRoleInstance ;
+    :assignedTo :BeaconDefenseIndustries ;
+    :validDuring :Interval_BeaconContractorPeriod ;
+    :appliesToContract :Contract_W912DY_23_C_0047 .
+
+:JamesLiuCORAssignment rdf:type :RoleAssignment ;
+    :assignedRole :InitialCORRoleInstance ;
+    :assignedTo :JamesLiu ;
+    :validDuring :Interval_LiuCORPeriod ;
+    :appliesToContract :Contract_W912DY_23_C_0047 .
+
+:SarahChenCORAssignment rdf:type :RoleAssignment ;
+    :assignedRole :ReplacementCORRoleInstance ;
+    :assignedTo :SarahChen ;
+    :validDuring :Interval_ChenCORPeriod ;
+    :appliesToContract :Contract_W912DY_23_C_0047 .
+
+#################################################################
+# Novation Modeling
+#################################################################
+
+:P00004 rdf:type :ContractModification ;
+    rdfs:label "Modification P00004" ;
+    :replacesLegalContractor :TalismanLogisticsSolutions ;
+    :substitutesLegalContractor :BeaconDefenseIndustries .
+
+:P00004_Document rdf:type :ModificationDocument ;
+    rdfs:label "P00004 Modification Document" ;
+    :documents :P00004_IssuanceEvent .
+
+:P00004_IssuanceEvent rdf:type :ModificationIssuanceEvent ;
+    rdfs:label "P00004 Issuance Event" ;
+    :producesStateTransition :P00004_StateTransition .
+
+:P00004_StateTransition rdf:type :ContractStateTransition ;
+    rdfs:label "P00004 Contract State Transition" ;
+    :changesContractState :Contract_W912DY_23_C_0047 ;
+    :resultsInContractorSubstitution :BeaconDefenseIndustries .
+
+#################################################################
+# COR Transition Modeling
+#################################################################
+
+:P00008 rdf:type :ContractModification ;
+    rdfs:label "Modification P00008" ;
+    :replacesCOR :JamesLiu ;
+    :substitutesCOR :SarahChen .
