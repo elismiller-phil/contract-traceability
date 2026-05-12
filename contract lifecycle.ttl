@@ -1,0 +1,275 @@
+@prefix : <http://example.org/contract-lifecycle#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:ContractLifecycleOntology rdf:type owl:Ontology ;
+    rdfs:label "Defense Contract Lifecycle Ontology" ;
+    rdfs:comment "Prototype ontology for modeling a government services contract across modifications, organizational change, personnel roles, performance states, and closeout." .
+
+### Classes
+
+:Contract rdf:type owl:Class ; rdfs:label "Contract" .
+:ServicesContract rdf:type owl:Class ; rdfs:subClassOf :Contract ; rdfs:label "Services Contract" .
+:ContractModification rdf:type owl:Class ; rdfs:label "Contract Modification" .
+:BilateralChangeOrder rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Bilateral Change Order" .
+:AdministrativeModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Administrative Modification" .
+:ScopeChangeModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Scope Change Modification" .
+:NovationModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Novation Modification" .
+:OptionExerciseModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Option Exercise Modification" .
+:StopWorkModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Stop-Work Modification" .
+:ResumeWorkModification rdf:type owl:Class ; rdfs:subClassOf :ContractModification ; rdfs:label "Resume-Work Modification" .
+
+:Organization rdf:type owl:Class ; rdfs:label "Organization" .
+:GovernmentOrganization rdf:type owl:Class ; rdfs:subClassOf :Organization ; rdfs:label "Government Organization" .
+:ContractorOrganization rdf:type owl:Class ; rdfs:subClassOf :Organization ; rdfs:label "Contractor Organization" .
+:Person rdf:type owl:Class ; rdfs:label "Person" .
+
+:Role rdf:type owl:Class ; rdfs:label "Role" .
+:ContractingOfficerRole rdf:type owl:Class ; rdfs:subClassOf :Role ; rdfs:label "Contracting Officer Role" .
+:ContractingOfficerRepresentativeRole rdf:type owl:Class ; rdfs:subClassOf :Role ; rdfs:label "Contracting Officer Representative Role" .
+:ContractorSignerRole rdf:type owl:Class ; rdfs:subClassOf :Role ; rdfs:label "Contractor Signer Role" .
+:LegalContractorRole rdf:type owl:Class ; rdfs:subClassOf :Role ; rdfs:label "Legal Contractor Role" .
+
+:PerformancePeriod rdf:type owl:Class ; rdfs:label "Performance Period" .
+:BasePeriod rdf:type owl:Class ; rdfs:subClassOf :PerformancePeriod ; rdfs:label "Base Period" .
+:OptionPeriod rdf:type owl:Class ; rdfs:subClassOf :PerformancePeriod ; rdfs:label "Option Period" .
+
+:DeliverableCategory rdf:type owl:Class ; rdfs:label "Deliverable Category" .
+:FundingObligation rdf:type owl:Class ; rdfs:label "Funding Obligation" .
+
+:ContractEvent rdf:type owl:Class ; rdfs:label "Contract Event" .
+:CorporateAcquisitionEvent rdf:type owl:Class ; rdfs:subClassOf :ContractEvent ; rdfs:label "Corporate Acquisition Event" .
+:NovationEvent rdf:type owl:Class ; rdfs:subClassOf :ContractEvent ; rdfs:label "Novation Event" .
+:StopWorkEvent rdf:type owl:Class ; rdfs:subClassOf :ContractEvent ; rdfs:label "Stop-Work Event" .
+:ResumeWorkEvent rdf:type owl:Class ; rdfs:subClassOf :ContractEvent ; rdfs:label "Resume-Work Event" .
+:CloseoutEvent rdf:type owl:Class ; rdfs:subClassOf :ContractEvent ; rdfs:label "Closeout Event" .
+
+:PerformanceState rdf:type owl:Class ; rdfs:label "Performance State" .
+:ActivePerformanceState rdf:type owl:Class ; rdfs:subClassOf :PerformanceState ; rdfs:label "Active Performance State" .
+:PausedPerformanceState rdf:type owl:Class ; rdfs:subClassOf :PerformanceState ; rdfs:label "Paused Performance State" .
+:ClosedPerformanceState rdf:type owl:Class ; rdfs:subClassOf :PerformanceState ; rdfs:label "Closed Performance State" .
+
+### Datatype Properties
+
+:hasContractNumber rdf:type owl:DatatypeProperty ; rdfs:domain :Contract ; rdfs:range xsd:string ; rdfs:label "has contract number" .
+:hasTotalPotentialValue rdf:type owl:DatatypeProperty ; rdfs:domain :Contract ; rdfs:range xsd:decimal ; rdfs:label "has total potential value" .
+:hasValueChange rdf:type owl:DatatypeProperty ; rdfs:domain :ContractModification ; rdfs:range xsd:decimal ; rdfs:label "has value change" .
+:hasStartDate rdf:type owl:DatatypeProperty ; rdfs:range xsd:date ; rdfs:label "has start date" .
+:hasEndDate rdf:type owl:DatatypeProperty ; rdfs:range xsd:date ; rdfs:label "has end date" .
+:hasIssueDate rdf:type owl:DatatypeProperty ; rdfs:range xsd:date ; rdfs:label "has issue date" .
+:hasModificationNumber rdf:type owl:DatatypeProperty ; rdfs:domain :ContractModification ; rdfs:range xsd:string ; rdfs:label "has modification number" .
+
+### Object Properties
+
+:hasGovernmentCustomer rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :GovernmentOrganization ; rdfs:label "has government customer" .
+:hasLegalContractor rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :ContractorOrganization ; rdfs:label "has legal contractor" .
+:hasContractingOfficer rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :Person ; rdfs:label "has contracting officer" .
+:hasCOR rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :Person ; rdfs:label "has COR" .
+:signedBy rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :Person ; rdfs:label "signed by" .
+:bearsRole rdf:type owl:ObjectProperty ; rdfs:range :Role ; rdfs:label "bears role" .
+:organizationBearsRole rdf:type owl:ObjectProperty ; rdfs:domain :Organization ; rdfs:range :Role ; rdfs:label "organization bears role" .
+
+:hasPerformancePeriod rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :PerformancePeriod ; rdfs:label "has performance period" .
+:hasPerformanceState rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :PerformanceState ; rdfs:label "has performance state" .
+:hasDeliverableCategory rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :DeliverableCategory ; rdfs:label "has deliverable category" .
+
+:hasModification rdf:type owl:ObjectProperty ; rdfs:domain :Contract ; rdfs:range :ContractModification ; rdfs:label "has modification" .
+:modifiesContract rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :Contract ; rdfs:label "modifies contract" .
+:precedesModification rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :ContractModification ; rdfs:label "precedes modification" .
+
+:addsScopeFor rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :Organization ; rdfs:label "adds scope for" .
+:revisesDeliverableSchedule rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :Contract ; rdfs:label "revises deliverable schedule" .
+:removesDeliverableCategory rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :DeliverableCategory ; rdfs:label "removes deliverable category" .
+:exercisesOptionPeriod rdf:type owl:ObjectProperty ; rdfs:domain :OptionExerciseModification ; rdfs:range :OptionPeriod ; rdfs:label "exercises option period" .
+:obligatesFunding rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :FundingObligation ; rdfs:label "obligates funding" .
+
+:replacesLegalContractor rdf:type owl:ObjectProperty ; rdfs:domain :NovationModification ; rdfs:range :ContractorOrganization ; rdfs:label "replaces legal contractor" .
+:substitutesLegalContractor rdf:type owl:ObjectProperty ; rdfs:domain :NovationModification ; rdfs:range :ContractorOrganization ; rdfs:label "substitutes legal contractor" .
+:replacesCOR rdf:type owl:ObjectProperty ; rdfs:domain :AdministrativeModification ; rdfs:range :Person ; rdfs:label "replaces COR" .
+:substitutesCOR rdf:type owl:ObjectProperty ; rdfs:domain :AdministrativeModification ; rdfs:range :Person ; rdfs:label "substitutes COR" .
+
+:pausesPerformanceOf rdf:type owl:ObjectProperty ; rdfs:domain :StopWorkModification ; rdfs:range :Contract ; rdfs:label "pauses performance of" .
+:resumesPerformanceOf rdf:type owl:ObjectProperty ; rdfs:domain :ResumeWorkModification ; rdfs:range :Contract ; rdfs:label "resumes performance of" .
+:extendsPerformancePeriod rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :PerformancePeriod ; rdfs:label "extends performance period" .
+
+:causedByEvent rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :ContractEvent ; rdfs:label "caused by event" .
+:resultsInEvent rdf:type owl:ObjectProperty ; rdfs:domain :ContractModification ; rdfs:range :ContractEvent ; rdfs:label "results in event" .
+:acquires rdf:type owl:ObjectProperty ; rdfs:domain :Organization ; rdfs:range :Organization ; rdfs:label "acquires" .
+:dissolvesEntity rdf:type owl:ObjectProperty ; rdfs:domain :ContractEvent ; rdfs:range :Organization ; rdfs:label "dissolves entity" .
+:transfersContractTo rdf:type owl:ObjectProperty ; rdfs:domain :ContractEvent ; rdfs:range :Organization ; rdfs:label "transfers contract to" .
+
+:overseesPerformance rdf:type owl:ObjectProperty ; rdfs:domain :Person ; rdfs:range :Contract ; rdfs:label "oversees performance" .
+:reportsIssueTo rdf:type owl:ObjectProperty ; rdfs:domain :Person ; rdfs:range :Person ; rdfs:label "reports issue to" .
+
+### Organizations
+
+:AirMobilityCommand rdf:type :GovernmentOrganization ; rdfs:label "Air Mobility Command" .
+:StrategicAirliftPlanningOffice rdf:type :GovernmentOrganization ; rdfs:label "Strategic Airlift Planning Office" .
+:NewSquadron rdf:type :GovernmentOrganization ; rdfs:label "Newly Stood-Up Squadron" .
+:TalismanLogisticsSolutions rdf:type :ContractorOrganization ; rdfs:label "Talisman Logistics Solutions, LLC" .
+:BeaconDefenseIndustries rdf:type :ContractorOrganization ; rdfs:label "Beacon Defense Industries" .
+
+### Persons and Roles
+
+:RobertKessler rdf:type :Person ; rdfs:label "Maj. Robert Kessler" ; :bearsRole :ContractingOfficerRoleInstance .
+:DanielaReyes rdf:type :Person ; rdfs:label "Daniela Reyes" ; :bearsRole :ContractorSignerRoleInstance .
+:JamesLiu rdf:type :Person ; rdfs:label "Capt. James Liu" ; :bearsRole :InitialCORRoleInstance .
+:SarahChen rdf:type :Person ; rdfs:label "Maj. Sarah Chen" ; :bearsRole :ReplacementCORRoleInstance .
+
+:ContractingOfficerRoleInstance rdf:type :ContractingOfficerRole ; rdfs:label "Contracting Officer Role Instance" .
+:ContractorSignerRoleInstance rdf:type :ContractorSignerRole ; rdfs:label "Contractor Signer Role Instance" .
+:InitialCORRoleInstance rdf:type :ContractingOfficerRepresentativeRole ; rdfs:label "Initial COR Role Instance" .
+:ReplacementCORRoleInstance rdf:type :ContractingOfficerRepresentativeRole ; rdfs:label "Replacement COR Role Instance" .
+:TalismanLegalContractorRoleInstance rdf:type :LegalContractorRole ; rdfs:label "Talisman Legal Contractor Role Instance" .
+:BeaconLegalContractorRoleInstance rdf:type :LegalContractorRole ; rdfs:label "Beacon Legal Contractor Role Instance" .
+
+:TalismanLogisticsSolutions :organizationBearsRole :TalismanLegalContractorRoleInstance .
+:BeaconDefenseIndustries :organizationBearsRole :BeaconLegalContractorRoleInstance .
+
+### Contract, Periods, Deliverables, Funding
+
+:Contract_W912DY_23_C_0047 rdf:type :ServicesContract ;
+    rdfs:label "Contract W912DY-23-C-0047" ;
+    :hasContractNumber "W912DY-23-C-0047" ;
+    :hasTotalPotentialValue "5200000.00"^^xsd:decimal ;
+    :hasGovernmentCustomer :AirMobilityCommand ;
+    :hasLegalContractor :TalismanLogisticsSolutions ;
+    :signedBy :RobertKessler, :DanielaReyes ;
+    :hasContractingOfficer :RobertKessler ;
+    :hasCOR :JamesLiu ;
+    :hasPerformancePeriod :BasePeriod_2023_2025, :OptionYear1_2025_2026, :OptionYear2_Planned ;
+    :hasPerformanceState :ActivePerformance ;
+    :hasDeliverableCategory :MonthlyStatusReports, :QuarterlyPerformanceReview, :DeliverableCategoryA, :DeliverableCategoryB, :ObsoleteDeliverableCategory .
+
+:BasePeriod_2023_2025 rdf:type :BasePeriod ;
+    rdfs:label "Base Period: April 2023 through March 2025" ;
+    :hasStartDate "2023-04-01"^^xsd:date ;
+    :hasEndDate "2025-03-31"^^xsd:date .
+
+:OptionYear1_2025_2026 rdf:type :OptionPeriod ;
+    rdfs:label "Option Year 1: April 2025 through March 2026" ;
+    :hasStartDate "2025-04-01"^^xsd:date ;
+    :hasEndDate "2026-03-31"^^xsd:date .
+
+:OptionYear2_Planned rdf:type :OptionPeriod ; rdfs:label "Planned Option Year 2 Not Exercised" .
+
+:MonthlyStatusReports rdf:type :DeliverableCategory ; rdfs:label "Monthly Status Reports" .
+:QuarterlyPerformanceReview rdf:type :DeliverableCategory ; rdfs:label "Quarterly Performance Review" .
+:DeliverableCategoryA rdf:type :DeliverableCategory ; rdfs:label "Deliverable Category A" .
+:DeliverableCategoryB rdf:type :DeliverableCategory ; rdfs:label "Deliverable Category B" .
+:ObsoleteDeliverableCategory rdf:type :DeliverableCategory ; rdfs:label "Obsolete Deliverable Category" .
+:FundingObligation_OptionYear1 rdf:type :FundingObligation ; rdfs:label "Option Year 1 Funding Obligation" .
+
+### Modifications
+
+:P00001 rdf:type :BilateralChangeOrder ;
+    rdfs:label "Modification P00001" ;
+    :hasModificationNumber "P00001" ;
+    :hasIssueDate "2023-09-01"^^xsd:date ;
+    :hasValueChange "340000.00"^^xsd:decimal ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :addsScopeFor :NewSquadron ;
+    :revisesDeliverableSchedule :Contract_W912DY_23_C_0047 .
+
+:P00002 rdf:type :AdministrativeModification ;
+    rdfs:label "Modification P00002" ;
+    :hasModificationNumber "P00002" ;
+    :hasIssueDate "2023-12-01"^^xsd:date ;
+    :modifiesContract :Contract_W912DY_23_C_0047 .
+
+:P00003 rdf:type :ScopeChangeModification ;
+    rdfs:label "Modification P00003" ;
+    :hasModificationNumber "P00003" ;
+    :hasIssueDate "2024-05-01"^^xsd:date ;
+    :hasValueChange "-180000.00"^^xsd:decimal ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :removesDeliverableCategory :ObsoleteDeliverableCategory .
+
+:P00004 rdf:type :NovationModification ;
+    rdfs:label "Modification P00004" ;
+    :hasModificationNumber "P00004" ;
+    :hasIssueDate "2024-10-01"^^xsd:date ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :replacesLegalContractor :TalismanLogisticsSolutions ;
+    :substitutesLegalContractor :BeaconDefenseIndustries .
+
+:P00005 rdf:type :OptionExerciseModification ;
+    rdfs:label "Modification P00005" ;
+    :hasModificationNumber "P00005" ;
+    :hasIssueDate "2025-03-01"^^xsd:date ;
+    :hasValueChange "2100000.00"^^xsd:decimal ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :exercisesOptionPeriod :OptionYear1_2025_2026 ;
+    :obligatesFunding :FundingObligation_OptionYear1 .
+
+:P00006 rdf:type :StopWorkModification ;
+    rdfs:label "Modification P00006" ;
+    :hasModificationNumber "P00006" ;
+    :hasIssueDate "2025-07-01"^^xsd:date ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :pausesPerformanceOf :Contract_W912DY_23_C_0047 ;
+    :resultsInEvent :StopWork_July2025 .
+
+:P00007 rdf:type :ResumeWorkModification ;
+    rdfs:label "Modification P00007" ;
+    :hasModificationNumber "P00007" ;
+    :hasIssueDate "2025-09-15"^^xsd:date ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :resumesPerformanceOf :Contract_W912DY_23_C_0047 ;
+    :extendsPerformancePeriod :OptionYear1_2025_2026 ;
+    :resultsInEvent :ResumeWork_Sept2025 .
+
+:P00008 rdf:type :AdministrativeModification ;
+    rdfs:label "Modification P00008" ;
+    :hasModificationNumber "P00008" ;
+    :hasIssueDate "2025-10-01"^^xsd:date ;
+    :modifiesContract :Contract_W912DY_23_C_0047 ;
+    :replacesCOR :JamesLiu ;
+    :substitutesCOR :SarahChen .
+
+:Contract_W912DY_23_C_0047 :hasModification :P00001, :P00002, :P00003, :P00004, :P00005, :P00006, :P00007, :P00008 .
+
+:P00001 :precedesModification :P00002 .
+:P00002 :precedesModification :P00003 .
+:P00003 :precedesModification :P00004 .
+:P00004 :precedesModification :P00005 .
+:P00005 :precedesModification :P00006 .
+:P00006 :precedesModification :P00007 .
+:P00007 :precedesModification :P00008 .
+
+### Events and States
+
+:Acquisition_Aug2024 rdf:type :CorporateAcquisitionEvent ;
+    rdfs:label "Beacon Acquisition of Talisman, August 2024" ;
+    :hasIssueDate "2024-08-01"^^xsd:date ;
+    :dissolvesEntity :TalismanLogisticsSolutions ;
+    :transfersContractTo :BeaconDefenseIndustries .
+
+:BeaconDefenseIndustries :acquires :TalismanLogisticsSolutions .
+
+:Novation_Oct2024 rdf:type :NovationEvent ; rdfs:label "Contract Novation to Beacon, October 2024" .
+:P00004 :causedByEvent :Acquisition_Aug2024 ; :resultsInEvent :Novation_Oct2024 .
+
+:StopWork_July2025 rdf:type :StopWorkEvent ;
+    rdfs:label "Stop-Work Event, July 2025" ;
+    :hasStartDate "2025-07-01"^^xsd:date ;
+    :hasEndDate "2025-09-14"^^xsd:date .
+
+:ResumeWork_Sept2025 rdf:type :ResumeWorkEvent ;
+    rdfs:label "Resume-Work Event, September 2025" ;
+    :hasIssueDate "2025-09-15"^^xsd:date .
+
+:Closeout_May2026 rdf:type :CloseoutEvent ;
+    rdfs:label "Administrative Closeout, May 2026" ;
+    :hasIssueDate "2026-05-01"^^xsd:date .
+
+:ActivePerformance rdf:type :ActivePerformanceState ; rdfs:label "Active Performance" .
+:PausedPerformance rdf:type :PausedPerformanceState ; rdfs:label "Paused Performance" .
+:ClosedPerformance rdf:type :ClosedPerformanceState ; rdfs:label "Closed Performance" .
+
+### Oversight Assertions
+
+:JamesLiu :overseesPerformance :Contract_W912DY_23_C_0047 ; :reportsIssueTo :RobertKessler .
+:SarahChen :overseesPerformance :Contract_W912DY_23_C_0047 ; :reportsIssueTo :RobertKessler .
